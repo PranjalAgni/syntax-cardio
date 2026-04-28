@@ -6,16 +6,18 @@
  * Plus: partition + find by id (ideas #9 and #4) to reach 10.
  */
 
-
 // ─── Testing ───
 export function lowercaseHello(name: string) {
-  return;
+  if (!name.length) return 'hello';
+  return 'hello ' + name.toLowerCase();
 }
 // ─── Easy ───
 
 /** Sum an array of numbers. */
 export function sum(numbers: number[]): number {
-  return 0;
+  return numbers.reduce((acc, elt) => {
+    return acc + elt;
+  }, 0);
 }
 
 /** Remove duplicates, keep first occurrence order (use strict equality). */
@@ -24,7 +26,10 @@ export function unique<T>(items: T[]): T[] {
 }
 
 /** Split into elements that satisfy `pred` vs those that do not (original relative order preserved in each bucket). */
-export function partition<T>(arr: T[], pred: (value: T) => boolean): { pass: T[]; fail: T[] } {
+export function partition<T>(
+  arr: T[],
+  pred: (value: T) => boolean,
+): { pass: T[]; fail: T[] } {
   return { pass: [], fail: [] };
 }
 
@@ -63,7 +68,10 @@ export type ScoreRow = { studentId: string; subject: string; score: number };
  * For each subject, take the top `n` scores (highest first). If fewer than `n` rows exist, return all.
  * Ties: stable by original order in the input array.
  */
-export function topNPerSubject(rows: ScoreRow[], n: number): Record<string, { studentId: string; score: number }[]> {
+export function topNPerSubject(
+  rows: ScoreRow[],
+  n: number,
+): Record<string, { studentId: string; score: number }[]> {
   return {};
 }
 
@@ -84,6 +92,8 @@ export type City = { name: string; state: string; population: number };
  * States ordered by **total** population (descending). Each entry lists that state’s city **names**
  * sorted **alphabetically** (A→Z).
  */
-export function groupStatesByPopulation(cities: City[]): { state: string; totalPopulation: number; cities: string[] }[] {
+export function groupStatesByPopulation(
+  cities: City[],
+): { state: string; totalPopulation: number; cities: string[] }[] {
   return [];
 }
