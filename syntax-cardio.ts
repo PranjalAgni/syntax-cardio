@@ -22,7 +22,16 @@ export function sum(numbers: number[]): number {
 
 /** Remove duplicates, keep first occurrence order (use strict equality). */
 export function unique<T>(items: T[]): T[] {
-  return [];
+  const hashMap = new Map<T, number>();
+  const uniqueItems: T[] = [];
+  for (const item of items) {
+    if (!hashMap.has(item)) {
+      uniqueItems.push(item);
+    }
+    hashMap.set(item, 1);
+  }
+
+  return uniqueItems;
 }
 
 /** Split into elements that satisfy `pred` vs those that do not (original relative order preserved in each bucket). */
@@ -30,14 +39,29 @@ export function partition<T>(
   arr: T[],
   pred: (value: T) => boolean,
 ): { pass: T[]; fail: T[] } {
-  return { pass: [], fail: [] };
+  const pass: T[] = [];
+  const fail: T[] = [];
+
+  arr.forEach((element) => {
+    if (pred(element)) {
+      pass.push(element);
+    } else {
+      fail.push(element);
+    }
+  });
+
+  return { pass, fail };
 }
 
 export type User = { id: string; name: string };
 
 /** Return the user’s `name` for `id`, or `null` if not found. */
 export function findNameById(users: User[], id: string): string | null {
-  return null;
+  const matchedUser = users.find((user) => {
+    return user.id === id;
+  });
+
+  return matchedUser?.name || null;
 }
 
 // ─── Medium ───
@@ -47,7 +71,12 @@ export function findNameById(users: User[], id: string): string | null {
  * Compare the remainder (case-sensitive OK; tests use consistent casing).
  */
 export function sortTitlesIgnoringArticles(titles: string[]): string[] {
-  return [];
+  const articles = /(The | A | An)/g;
+  return titles.sort((titleA: string, titleB: string) => {
+    const cleanTitleA = titleA.replace(articles, '');
+    const cleanTitleB = titleB.replace(articles, '');
+    return cleanTitleA.localeCompare(cleanTitleB);
+  });
 }
 
 /** Split `arr` into consecutive chunks of length `size` (last chunk may be shorter). Assume `size > 0`. */
