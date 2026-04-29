@@ -81,7 +81,26 @@ export function sortTitlesIgnoringArticles(titles: string[]): string[] {
 
 /** Split `arr` into consecutive chunks of length `size` (last chunk may be shorter). Assume `size > 0`. */
 export function chunk<T>(arr: T[], size: number): T[][] {
-  return [];
+  const chunkedArray = [];
+  // standard approach:
+  // traverse the array
+  // start an counter at 1
+  // increment the counter when it reaches the size
+  // then we need to start a new chunk and reset the counter to 1
+  const N = arr.length;
+  let chunk = [];
+  for (let idx = 0; idx < N; idx++) {
+    chunk.push(arr[idx]);
+    if (chunk.length === size) {
+      chunkedArray.push(chunk);
+      chunk = [];
+    }
+  }
+
+  if (chunk.length) {
+    chunkedArray.push(chunk);
+  }
+  return chunkedArray;
 }
 
 // ─── Harder ───
