@@ -124,7 +124,27 @@ export function topNPerSubject(
   rows: ScoreRow[],
   n: number,
 ): Record<string, { studentId: string; score: number }[]> {
-  return {};
+  const subjectVsScoreMap = new Map<
+    string,
+    { studentId: string; score: number }[]
+  >();
+
+  for (const row of rows) {
+    if (!subjectVsScoreMap.has(row.subject)) {
+      subjectVsScoreMap.set(row.subject, []);
+    }
+
+    const scores = subjectVsScoreMap.get(row.subject)!;
+    scores.push({ studentId: row.studentId, score: row.score });
+    subjectVsScoreMap.set(row.subject, scores);
+  }
+
+  const answer: Record<string, { studentId: string; score: number }[]> = {};
+
+  for (const [key, value] of subjectVsScoreMap) {
+    answer[key] = value.sort((a, b) => b.score - a.score).slice(0, n);
+  }
+  return answer;
 }
 
 // ─── Hard ───
