@@ -185,5 +185,35 @@ export type City = { name: string; state: string; population: number };
 export function groupStatesByPopulation(
   cities: City[],
 ): { state: string; totalPopulation: number; cities: string[] }[] {
-  return [];
+  const stateVsPopulationMap = new Map<
+    string,
+    { totalPopulation: number; cities: string[] }
+  >();
+  for (const city of cities) {
+    if (!stateVsPopulationMap.has(city.state)) {
+      stateVsPopulationMap.set(city.state, { totalPopulation: 0, cities: [] });
+    }
+
+    const data = stateVsPopulationMap.get(city.state)!;
+    stateVsPopulationMap.set(city.state, {
+      totalPopulation: data.totalPopulation + city.population,
+      cities: data.cities.concat([city.name]),
+    });
+  }
+
+  const answer: { state: string; totalPopulation: number; cities: string[] }[] =
+    [];
+
+  for (const [key, value] of stateVsPopulationMap) {
+    const sortedCities = value.cities.sort((a, b) => a.localeCompare(b));
+    answer.push({
+      state: key,
+      totalPopulation: value.totalPopulation,
+      cities: sortedCities,
+    });
+  }
+
+  return answer.sort((a, b) => {
+    return b.totalPopulation - a.totalPopulation;
+  });
 }
