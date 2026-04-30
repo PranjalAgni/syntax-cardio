@@ -135,7 +135,25 @@ export type DocWords = { id: string; words: string[] };
  * Word → sorted list of document ids that contain that word (each id once per word).
  */
 export function invertedIndex(docs: DocWords[]): Record<string, string[]> {
-  return {};
+  const wordVsIdMap = new Map<string, string[]>();
+  for (const doc of docs) {
+    for (const word of doc.words) {
+      if (!wordVsIdMap.has(word)) {
+        wordVsIdMap.set(word, []);
+      }
+
+      const idList = wordVsIdMap.get(word)!;
+      idList.push(doc.id);
+      wordVsIdMap.set(word, idList);
+    }
+  }
+
+  const answer: Record<string, string[]> = {};
+  for (let [key, value] of wordVsIdMap) {
+    answer[key] = value.sort((a, b) => a.localeCompare(b));
+  }
+
+  return answer;
 }
 
 export type City = { name: string; state: string; population: number };
