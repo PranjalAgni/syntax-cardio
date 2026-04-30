@@ -107,7 +107,11 @@ export function chunk<T>(arr: T[], size: number): T[][] {
 
 /** Cumulative sum at each step. */
 export function runningTotal(values: number[]): number[] {
-  return [];
+  return values.reduce((acc: number[], current: number, pos: number) => {
+    let previous = pos === 0 ? 0 : acc[pos - 1];
+    acc.push(previous + current);
+    return acc;
+  }, []);
 }
 
 export type ScoreRow = { studentId: string; subject: string; score: number };
