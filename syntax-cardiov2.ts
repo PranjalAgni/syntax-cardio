@@ -58,19 +58,23 @@ export function wordCount(s: string): Record<string, number> {
 }
 
 /**
- * Clamp `s` to at most `n` characters **including** the suffix.
+ * Truncate `s` so the result is at most `n` characters long. The length of
+ * `suffix` counts toward `n` (it's a budget, not an addition).
  * - If `s.length <= n`, return `s` unchanged.
- * - Else, return `s.slice(0, n - suffix.length) + suffix` so the result
- *   has length exactly `n`.
- * - Assume `n >= suffix.length`. No smart whitespace trimming — if the cut
- *   lands mid-space, you keep the space.
+ * - Otherwise, return a prefix of `s` followed by `suffix`, with total
+ *   length exactly `n`.
+ * - Assume `n >= suffix.length`. No whitespace smarts — if the cut lands
+ *   mid-space, the space stays.
  *
  *   truncate("hello world", 8)        // "hello..."
  *   truncate("hello world", 8, "…")   // "hello w…"
  *   truncate("hi", 10)                // "hi"
  */
 export function truncate(s: string, n: number, suffix = '...'): string {
-  throw new Error('not implemented');
+  if (s.length <= n) return s;
+  const suffixLength = suffix.length;
+  const prefix = s.slice(0, n - suffixLength);
+  return prefix + suffix;
 }
 
 // ─── Medium ───
