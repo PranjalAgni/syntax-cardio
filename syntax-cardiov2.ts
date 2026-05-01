@@ -48,7 +48,13 @@ export function slugify(s: string): string {
  *   wordCount("the cat. The dog!") // { the: 2, cat: 1, dog: 1 }
  */
 export function wordCount(s: string): Record<string, number> {
-  throw new Error('not implemented');
+  const wordRegex = /\w+/g;
+  const wordList = s.match(wordRegex)?.map((s) => s.toLowerCase()) ?? [];
+  const answer: Record<string, number> = {};
+  for (const word of wordList) {
+    answer[word] = (answer[word] ?? 0) + 1;
+  }
+  return answer;
 }
 
 /**
