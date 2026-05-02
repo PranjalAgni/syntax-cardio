@@ -91,7 +91,24 @@ export function truncate(s: string, n: number, suffix = '...'): string {
  *   parseQueryString("?name=John%20Doe") // { name: "John Doe" }
  */
 export function parseQueryString(s: string): Record<string, string | string[]> {
-  throw new Error('not implemented');
+  if (s.startsWith('?')) s = s.slice(1);
+  if (!s) return {};
+  const answer: Record<string, string | string[]> = {};
+  for (const pair of s.split('&')) {
+    let [key, value] = pair.split('=');
+    key = key.replaceAll('%20', ' ');
+    value = (value || '').replaceAll('%20', ' ');
+    if (answer[key]) {
+      if (Array.isArray(answer[key])) {
+        answer[key] = [...answer[key], value];
+      } else {
+        answer[key] = [answer[key] as string, value];
+      }
+    } else {
+      answer[key] = value;
+    }
+  }
+  return answer;
 }
 
 /**
