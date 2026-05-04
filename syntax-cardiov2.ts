@@ -96,8 +96,8 @@ export function parseQueryString(s: string): Record<string, string | string[]> {
   const answer: Record<string, string | string[]> = {};
   for (const pair of s.split('&')) {
     let [key, value] = pair.split('=');
-    key = key.replaceAll('%20', ' ');
-    value = (value || '').replaceAll('%20', ' ');
+    key = decodeURIComponent(key);
+    value = decodeURIComponent(value || '');
     if (answer[key]) {
       if (Array.isArray(answer[key])) {
         answer[key] = [...answer[key], value];
@@ -125,7 +125,15 @@ export function templateRender(
   template: string,
   data: Record<string, string | number>,
 ): string {
-  throw new Error('not implemented');
+  const regex = /({{\w+}}|{{ \w+ }})/g;
+  const wordRegex = /\w+/g;
+  const matches = template.match(regex) ?? [];
+  for (const text of matches) {
+    const [word] = text.match(wordRegex)!;
+    const value = String(data[word] || '');
+    template.replace(text, value);
+  }
+  return template;
 }
 
 /**
