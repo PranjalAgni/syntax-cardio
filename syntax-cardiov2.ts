@@ -154,7 +154,23 @@ export function templateRender(
 export function stringifyQuery(
   obj: Record<string, string | number | (string | number)[] | null | undefined>,
 ): string {
-  throw new Error('not implemented');
+  const segmentList = [];
+  for (let [key, value] of Object.entries(obj)) {
+    key = encodeURIComponent(key);
+    let segment = '';
+    if (Array.isArray(value)) {
+      segment = value.reduce((acc: string, v) => {
+        if (!v) return acc;
+        if (acc) acc += '&';
+        return acc + `${key}=${encodeURIComponent(v)}`;
+      }, '');
+    } else if (value) {
+      segment = `${key}=${encodeURIComponent(value)}`;
+    }
+
+    if (segment) segmentList.push(segment);
+  }
+  return segmentList.join('&');
 }
 
 // ─── Harder ───
