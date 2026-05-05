@@ -131,7 +131,7 @@ export function templateRender(
   for (const text of matches) {
     const [word] = text.match(wordRegex)!;
     const value = String(data[word] || '');
-    template.replace(text, value);
+    template = template.replace(text, value);
   }
   return template;
 }
