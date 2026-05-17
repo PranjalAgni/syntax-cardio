@@ -206,7 +206,23 @@ export function parseCSVLine(line: string): string[] {
  *   // ["supercalifragilistic", "is fun"]
  */
 export function wordWrap(s: string, width: number): string[] {
-  throw new Error('not implemented');
+  // This regex matches each contiguous chunk of non-whitespace text (i.e., words/tokens separated by whitespace).
+  const regex = /\S+/g;
+  const words = s.split(regex) ?? [];
+  let currentLine = '';
+  const lines = [];
+  for (const word of words) {
+    const candidate = currentLine + word;
+    if (candidate.length > width) {
+      lines.push(currentLine);
+      currentLine = word;
+    } else {
+      currentLine = candidate;
+    }
+  }
+
+  if (currentLine) lines.push(currentLine);
+  return lines;
 }
 
 // ─── Hard ───
