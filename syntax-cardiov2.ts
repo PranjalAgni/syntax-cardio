@@ -212,6 +212,7 @@ export function wordWrap(s: string, width: number): string[] {
   let currentLine = '';
   const lines = [];
   for (const word of words) {
+    if (currentLine) currentLine += ' ';
     const candidate = currentLine + word;
     if (candidate.length > width) {
       lines.push(currentLine);
@@ -221,7 +222,8 @@ export function wordWrap(s: string, width: number): string[] {
     }
   }
 
-  if (currentLine) lines.push(currentLine);
+  console.error(currentLine);
+  if (currentLine.trim().length) lines.push(currentLine);
   return lines;
 }
 
